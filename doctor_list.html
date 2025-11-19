@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Doctors - Doctor Appointment System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+    background: linear-gradient(135deg, #71b7e6, #9b59b6);
+    min-height: 100vh;
+    color: #333;
+  }
+    .doctor-card {
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgb(0 0 0 / 0.1);
+      transition: 0.3s ease;
+      height: 100%;
+    }
+    .doctor-card:hover {
+      box-shadow: 0 10px 30px rgb(0 0 0 / 0.2);
+    }
+    .doctor-img {
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border: 4px solid #6f42c1;
+      margin-top: -50px;
+      background: white;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">CurePoint</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto align-items-center">
+          <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="doctor_list.html" class="nav-link active">Doctors</a></li>
+          <li class="nav-item"><a href="book_appointment.html" class="nav-link">Book Appointment</a></li>
+          <li class="nav-item"><a href="my_appointments.html" class="nav-link">My Appointments</a></li>
+          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+        <button type="button" class="btn btn-outline-light ms-3" data-bs-toggle="modal" data-bs-target="#adminLoginModal">
+          Admin
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <section class="container py-5 mt-5">
+    <h2 class="mb-4 text-center text-secondary">Our Doctors</h2>
+    <div class="row" id="doctorListContainer"></div>
+  </section>
+
+  <!-- Admin Login Modal (same as index.html) -->
+  <div class="modal fade" id="adminLoginModal" tabindex="-1" aria-labelledby="adminLoginLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content p-3">
+        <h5 class="modal-title mb-3" id="adminLoginLabel">Admin Login</h5>
+        <form id="adminLoginForm">
+          <div class="mb-3">
+            <label for="adminUsername" class="form-label">Username</label>
+            <input type="text" class="form-control" id="adminUsername" required />
+          </div>
+          <div class="mb-3">
+            <label for="adminPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="adminPassword" required />
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Login</button>
+          <div class="mt-3 text-danger" id="loginError" style="display:none;">Invalid username or password</div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const doctors = [
+      {id: 1, name: "Dr. Anjali Sharma", specialty: "Cardiologist", img: "https://randomuser.me/api/portraits/women/44.jpg"},
+      {id: 2, name: "Dr. Mohan Kumar", specialty: "Dermatologist", img: "https://randomuser.me/api/portraits/men/32.jpg"},
+      {id: 3, name: "Dr. Ritu Verma", specialty: "Pediatrician", img: "https://randomuser.me/api/portraits/women/55.jpg"},
+      {id: 4, name: "Dr. Vikram Singh", specialty: "Neurologist", img: "https://randomuser.me/api/portraits/men/45.jpg"}
+    ];
+
+    const container = document.getElementById('doctorListContainer');
+    doctors.forEach(doc => {
+      container.innerHTML += `
+        <div class="col-md-3 mb-4">
+          <div class="card doctor-card p-4 text-center bg-white h-100">
+            <img src="${doc.img}" alt="${doc.name}" class="doctor-img mx-auto mb-3" />
+            <h5 class="fw-bold">${doc.name}</h5>
+            <p class="text-muted">${doc.specialty}</p>
+            <a href="book_appointment.html?doctor=${encodeURIComponent(doc.name)}" class="btn btn-secondary mt-2">Book Now</a>
+          </div>
+        </div>`;
+    });
+
+    // Admin Login as in index.html
+    document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const username = document.getElementById('adminUsername').value.trim();
+      const password = document.getElementById('adminPassword').value;
+      const errorDiv = document.getElementById('loginError');
+
+      if(username === 'admin' && password === 'password123') {
+        errorDiv.style.display = 'none';
+        const modalElement = document.getElementById('adminLoginModal');
+        const modal = bootstrap.Modal.getInstance(modalElement);
+        modal.hide();
+        window.location.href = 'admin_dashboard.html';
+      } else {
+        errorDiv.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>
